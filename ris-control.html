@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RIS Control | Gestao Operacional</title>
+    <link rel="stylesheet" href="ris-control.css">
+  </head>
+  <body>
+    <div id="loginView" class="login-shell">
+      <section class="login-panel">
+        <div class="brand-mark">RIS</div>
+        <p class="eyebrow">Gestao operacional para academias</p>
+        <h1>RIS Control</h1>
+        <p class="login-copy">Registre problemas, atribua responsaveis, acompanhe tarefas e valide checklists da operacao.</p>
+
+        <form id="loginForm" class="login-form">
+          <label>
+            Usuario
+            <select id="loginUser">
+              <option value="ana">Ana - Gerente</option>
+              <option value="bruno">Bruno - Professor</option>
+              <option value="carla">Carla - Lider Limpeza</option>
+              <option value="diego">Diego - Administrador</option>
+            </select>
+          </label>
+          <label>
+            Senha
+            <input type="password" value="123456" aria-label="Senha">
+          </label>
+          <button class="primary-action" type="submit">Entrar</button>
+        </form>
+      </section>
+    </div>
+
+    <div id="appView" class="app-shell hidden">
+      <aside class="sidebar">
+        <div class="side-brand">
+          <span class="brand-mark small">RIS</span>
+          <div>
+            <strong>RIS Control</strong>
+            <small>GR8 Operacao</small>
+          </div>
+        </div>
+        <nav class="side-nav" aria-label="Navegacao principal">
+          <button class="nav-item active" type="button" data-view="dashboard">Inicio</button>
+          <button class="nav-item" type="button" data-view="ris">RIS</button>
+          <button class="nav-item" type="button" data-view="tasks">Tarefas</button>
+          <button class="nav-item" type="button" data-view="checklists">Checklists</button>
+          <button class="nav-item manager-only" type="button" data-view="manager">Gerencia</button>
+        </nav>
+        <button id="resetDemo" class="ghost-action" type="button">Restaurar demo</button>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <div>
+            <p id="todayLabel" class="eyebrow"></p>
+            <h2 id="viewTitle">Inicio</h2>
+          </div>
+          <div class="topbar-actions">
+            <button id="newRisButton" class="primary-action compact" type="button">Novo RIS</button>
+            <button id="logoutButton" class="ghost-action compact" type="button">Sair</button>
+          </div>
+        </header>
+
+        <section id="dashboardView" class="view active-view">
+          <div class="metric-grid">
+            <article class="metric-card">
+              <span>RIS abertos</span>
+              <strong id="metricOpenRis">0</strong>
+            </article>
+            <article class="metric-card danger">
+              <span>Atrasados</span>
+              <strong id="metricLate">0</strong>
+            </article>
+            <article class="metric-card">
+              <span>Minhas tarefas</span>
+              <strong id="metricMyTasks">0</strong>
+            </article>
+            <article class="metric-card ok">
+              <span>Checklists hoje</span>
+              <strong id="metricChecklist">0</strong>
+            </article>
+          </div>
+
+          <div class="content-grid">
+            <section class="panel">
+              <div class="panel-head">
+                <h3>RIS prioritarios</h3>
+                <button class="text-action" type="button" data-view-jump="ris">Ver todos</button>
+              </div>
+              <div id="priorityRisList" class="item-list"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <h3>Minhas pendencias</h3>
+                <button class="text-action" type="button" data-view-jump="tasks">Ver tarefas</button>
+              </div>
+              <div id="myTaskList" class="item-list"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="risView" class="view">
+          <div class="toolbar">
+            <label>
+              Status
+              <select id="risStatusFilter">
+                <option value="all">Todos</option>
+                <option>Reportado</option>
+                <option>Em analise</option>
+                <option>Aguardando responsavel</option>
+                <option>Em execucao</option>
+                <option>Solucionado</option>
+                <option>Cancelado com justificativa</option>
+                <option>Reaberto</option>
+              </select>
+            </label>
+            <label>
+              Gravidade
+              <select id="risSeverityFilter">
+                <option value="all">Todas</option>
+                <option>Baixa</option>
+                <option>Media</option>
+                <option>Alta</option>
+                <option>Critica</option>
+              </select>
+            </label>
+          </div>
+          <div id="risList" class="record-list"></div>
+        </section>
+
+        <section id="tasksView" class="view">
+          <div class="toolbar">
+            <label>
+              Filtro
+              <select id="taskFilter">
+                <option value="mine">Minhas tarefas</option>
+                <option value="open">Abertas</option>
+                <option value="late">Atrasadas</option>
+                <option value="done">Concluidas</option>
+                <option value="all">Todas</option>
+              </select>
+            </label>
+          </div>
+          <div id="taskList" class="record-list"></div>
+        </section>
+
+        <section id="checklistsView" class="view">
+          <div id="checklistList" class="checklist-grid"></div>
+        </section>
+
+        <section id="managerView" class="view">
+          <div class="content-grid">
+            <section class="panel">
+              <h3>RIS por status</h3>
+              <div id="statusBreakdown" class="breakdown-list"></div>
+            </section>
+            <section class="panel">
+              <h3>Setores com mais problemas</h3>
+              <div id="sectorBreakdown" class="breakdown-list"></div>
+            </section>
+          </div>
+          <section class="panel audit-panel">
+            <h3>Historico recente</h3>
+            <div id="auditList" class="audit-list"></div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="risDialog">
+      <form id="risForm" class="dialog-card">
+        <div class="dialog-head">
+          <div>
+            <p class="eyebrow">Registro de Incidencia e Solucao</p>
+            <h3>Novo RIS</h3>
+          </div>
+          <button class="icon-action" type="button" data-close-dialog>x</button>
+        </div>
+        <label>
+          O que aconteceu?
+          <input id="risTitle" required maxlength="80" placeholder="Ex.: Esteira 03 fazendo barulho">
+        </label>
+        <label>
+          Descricao
+          <textarea id="risDescription" required rows="4" placeholder="Descreva o problema com detalhes"></textarea>
+        </label>
+        <div class="form-grid">
+          <label>
+            Local
+            <input id="risLocation" required placeholder="Sala de musculacao">
+          </label>
+          <label>
+            Setor
+            <select id="risSector">
+              <option>Equipamentos</option>
+              <option>Recepcao</option>
+              <option>Limpeza</option>
+              <option>Manutencao</option>
+              <option>Comercial</option>
+              <option>Professores</option>
+            </select>
+          </label>
+          <label>
+            Categoria
+            <select id="risCategory">
+              <option>Equipamentos</option>
+              <option>Limpeza</option>
+              <option>Estrutura fisica</option>
+              <option>Ar-condicionado</option>
+              <option>Iluminacao</option>
+              <option>Catraca/acesso</option>
+              <option>Atendimento</option>
+              <option>Seguranca</option>
+              <option>Sistema/software</option>
+              <option>Outros</option>
+            </select>
+          </label>
+          <label>
+            Gravidade
+            <select id="risSeverity">
+              <option>Baixa</option>
+              <option>Media</option>
+              <option>Alta</option>
+              <option>Critica</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          Evidencia
+          <input id="risEvidence" type="file" accept="image/*,video/*">
+        </label>
+        <div class="dialog-actions">
+          <button class="ghost-action" type="button" data-close-dialog>Cancelar</button>
+          <button class="primary-action" type="submit">Enviar RIS</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="detailDialog">
+      <div class="dialog-card detail-card">
+        <div class="dialog-head">
+          <div>
+            <p id="detailMeta" class="eyebrow"></p>
+            <h3 id="detailTitle"></h3>
+          </div>
+          <button class="icon-action" type="button" data-close-detail>x</button>
+        </div>
+        <div id="detailBody"></div>
+      </div>
+    </dialog>
+
+    <script src="ris-control.js"></script>
+  </body>
+</html>
