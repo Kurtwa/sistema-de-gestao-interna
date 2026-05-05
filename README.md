@@ -17,10 +17,21 @@ Abra `index.html` ou `ris-control.html` no navegador.
 
 ## Usuarios de demonstracao
 
-- Ana - Gerente.
-- Bruno - Professor.
-- Carla - Lider Limpeza.
-- Diego - Administrador.
+- Kurt - Administrador full.
+- Samy - Gerente.
+- Isabela Amorin - Professora.
+- Brono Ferrandi - Professor.
+- Cesar - Professor.
+- Felipe Gomes - Professor.
+- Daniela - Professora.
+- Clarice - Recepcao.
+- Kelly - Recepcao.
+- Kanannda - SDR vendas.
+- Deva - Limpeza.
+- Luiz - Limpeza.
+- Paulino - Manutencao de maquinas.
+- Rui - Manutencao eletrica.
+- Thiago - Iluminacao, som e cameras.
 
 Senha demonstrativa: `123456`.
 

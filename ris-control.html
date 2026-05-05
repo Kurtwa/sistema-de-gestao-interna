@@ -17,12 +17,7 @@
         <form id="loginForm" class="login-form">
           <label>
             Usuario
-            <select id="loginUser">
-              <option value="ana">Ana - Gerente</option>
-              <option value="bruno">Bruno - Professor</option>
-              <option value="carla">Carla - Lider Limpeza</option>
-              <option value="diego">Diego - Administrador</option>
-            </select>
+            <select id="loginUser"></select>
           </label>
           <label>
             Senha
@@ -34,6 +29,12 @@
     </div>
 
     <div id="appView" class="app-shell hidden">
+      <button id="mobileMenuButton" class="mobile-menu-button" type="button" aria-label="Abrir navegacao" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div id="mobileMenuOverlay" class="mobile-menu-overlay hidden"></div>
       <aside class="sidebar">
         <div class="side-brand">
           <span class="brand-mark small">RIS</span>
@@ -47,9 +48,10 @@
           <button class="nav-item" type="button" data-view="ris">RIS</button>
           <button class="nav-item" type="button" data-view="tasks">Tarefas</button>
           <button class="nav-item" type="button" data-view="checklists">Checklists</button>
+          <button class="nav-item full-only" type="button" data-view="users">Usuarios</button>
           <button class="nav-item manager-only" type="button" data-view="manager">Gerencia</button>
+          <button class="nav-item full-only" type="button" data-view="settings">Ajustes</button>
         </nav>
-        <button id="resetDemo" class="ghost-action" type="button">Restaurar demo</button>
       </aside>
 
       <main class="main-panel">
@@ -59,8 +61,26 @@
             <h2 id="viewTitle">Inicio</h2>
           </div>
           <div class="topbar-actions">
-            <button id="newRisButton" class="primary-action compact" type="button">Novo RIS</button>
-            <button id="logoutButton" class="ghost-action compact" type="button">Sair</button>
+            <div class="action-menu">
+              <button id="quickCreateButton" class="icon-action create-action" type="button" aria-label="Criar novo" aria-expanded="false">+</button>
+              <div id="quickCreateMenu" class="action-menu-list hidden">
+                <button type="button" data-open-ris-form><span>RIS</span><strong>Nova ocorrencia</strong></button>
+                <button class="manager-only" type="button" data-open-task-form><span>Tarefa</span><strong>Nova pendencia</strong></button>
+                <button class="manager-only" type="button" data-open-checklist-form><span>Checklist</span><strong>Nova rotina</strong></button>
+              </div>
+            </div>
+            <div class="profile-menu">
+              <button id="profileButton" class="profile-button" type="button" aria-label="Usuario logado" aria-expanded="false">
+                <span id="profileInitials">--</span>
+              </button>
+              <div id="profileMenu" class="profile-menu-list hidden">
+                <div class="profile-summary">
+                  <strong id="profileName">Usuario</strong>
+                  <span id="profileRole">Perfil</span>
+                </div>
+                <button id="logoutButton" type="button">Sair</button>
+              </div>
+            </div>
           </div>
         </header>
 
@@ -104,7 +124,7 @@
         </section>
 
         <section id="risView" class="view">
-          <div class="toolbar">
+          <div class="toolbar split-toolbar">
             <label>
               Status
               <select id="risStatusFilter">
@@ -133,7 +153,7 @@
         </section>
 
         <section id="tasksView" class="view">
-          <div class="toolbar">
+          <div class="toolbar split-toolbar">
             <label>
               Filtro
               <select id="taskFilter">
@@ -149,7 +169,24 @@
         </section>
 
         <section id="checklistsView" class="view">
+          <div class="toolbar split-toolbar">
+            <div>
+              <p class="eyebrow">Rotina operacional</p>
+              <h3>Checklists</h3>
+            </div>
+          </div>
           <div id="checklistList" class="checklist-grid"></div>
+        </section>
+
+        <section id="usersView" class="view">
+          <div class="toolbar split-toolbar">
+            <div>
+              <p class="eyebrow">Permissao full</p>
+              <h3>Usuarios e permissoes</h3>
+            </div>
+            <button id="newUserButton" class="primary-action compact" type="button">Novo usuario</button>
+          </div>
+          <div id="userList" class="record-list"></div>
         </section>
 
         <section id="managerView" class="view">
@@ -168,6 +205,33 @@
             <div id="auditList" class="audit-list"></div>
           </section>
         </section>
+
+        <section id="settingsView" class="view">
+          <div class="content-grid">
+            <section class="panel settings-panel">
+              <p class="eyebrow">Configuracoes do app</p>
+              <h3>Dados de demonstracao</h3>
+              <p class="muted">Use esta acao apenas quando quiser limpar as alteracoes locais e voltar para a massa demo da academia.</p>
+              <button id="resetDemo" class="ghost-action compact danger-action" type="button">Restaurar dados demo</button>
+            </section>
+            <section class="panel settings-panel">
+              <p class="eyebrow">Permissao</p>
+              <h3>Acesso restrito</h3>
+              <p class="muted">Somente usuarios com permissao full conseguem acessar ajustes, usuarios e configuracoes sensiveis.</p>
+            </section>
+          </div>
+        </section>
+
+        <footer class="app-footer">
+          <div>
+            <strong>RIS Control</strong>
+            <span>Gestao interna GR8 Operacao</span>
+          </div>
+          <div class="footer-meta">
+            <span>Protótipo local</span>
+            <span>v0.1</span>
+          </div>
+        </footer>
       </main>
     </div>
 
@@ -251,6 +315,258 @@
         </div>
         <div id="detailBody"></div>
       </div>
+    </dialog>
+
+    <dialog id="manageRisDialog">
+      <form id="manageRisForm" class="dialog-card">
+        <input id="manageRisId" type="hidden">
+        <div class="dialog-head">
+          <div>
+            <p class="eyebrow">Gestao da ocorrencia</p>
+            <h3 id="manageRisTitle">Gerenciar RIS</h3>
+          </div>
+          <button class="icon-action" type="button" data-close-manage-ris>x</button>
+        </div>
+        <div class="form-grid">
+          <label>
+            Status
+            <select id="manageRisStatus">
+              <option>Reportado</option>
+              <option>Em analise</option>
+              <option>Aguardando responsavel</option>
+              <option>Em execucao</option>
+              <option>Em tratativa</option>
+              <option>Aguardando retorno</option>
+              <option>Aguardando validacao</option>
+              <option>Solucionado</option>
+              <option>Encerrado sem acao</option>
+              <option>Cancelado com justificativa</option>
+              <option>Reaberto</option>
+            </select>
+          </label>
+          <label>
+            Responsavel
+            <select id="manageRisAssigned"></select>
+          </label>
+          <label>
+            Prazo
+            <input id="manageRisDue" type="datetime-local">
+          </label>
+          <label>
+            Gravidade
+            <select id="manageRisSeverity">
+              <option>Baixa</option>
+              <option>Media</option>
+              <option>Alta</option>
+              <option>Critica</option>
+            </select>
+          </label>
+          <label>
+            Natureza
+            <select id="manageRisNature">
+              <option>Execucao</option>
+              <option>Tratativa</option>
+              <option>Misto</option>
+            </select>
+          </label>
+          <label>
+            Tipo de responsavel
+            <select id="manageRisAssigneeType">
+              <option>Funcionario interno</option>
+              <option>Setor interno</option>
+              <option>Prestador externo</option>
+              <option>Sem executor definido</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          Observacao da gestao
+          <textarea id="manageRisNote" rows="4" placeholder="Descreva a decisao, transferencia, tratativa ou proximo passo"></textarea>
+        </label>
+        <div class="permission-note">
+          Alteracoes de status, responsavel, prazo, gravidade e natureza ficam registradas no historico do RIS.
+        </div>
+        <div class="dialog-actions">
+          <button class="ghost-action" type="button" data-close-manage-ris>Cancelar</button>
+          <button class="primary-action" type="submit">Salvar gestao</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="userDialog">
+      <form id="userForm" class="dialog-card">
+        <input id="userId" type="hidden">
+        <div class="dialog-head">
+          <div>
+            <p class="eyebrow">Controle de acesso</p>
+            <h3 id="userDialogTitle">Novo usuario</h3>
+          </div>
+          <button class="icon-action" type="button" data-close-user>x</button>
+        </div>
+        <div class="form-grid">
+          <label>
+            Nome
+            <input id="userNameInput" required maxlength="80" placeholder="Nome completo">
+          </label>
+          <label>
+            Usuario de login
+            <input id="userLoginInput" required maxlength="30" placeholder="ex.: marina">
+          </label>
+          <label>
+            Perfil
+            <select id="userRoleInput">
+              <option>Funcionario</option>
+              <option>Lider</option>
+              <option>Gerente</option>
+              <option>Administrador</option>
+            </select>
+          </label>
+          <label>
+            Setor
+            <select id="userSectorInput">
+              <option>Administracao</option>
+              <option>Gerencia</option>
+              <option>Equipamentos</option>
+              <option>Recepcao</option>
+              <option>Limpeza</option>
+              <option>Manutencao</option>
+              <option>Comercial</option>
+              <option>Professores</option>
+            </select>
+          </label>
+          <label>
+            Permissao
+            <select id="userPermissionInput">
+              <option value="basic">Basica - tarefas proprias</option>
+              <option value="sector">Setor - lideranca do setor</option>
+              <option value="manager">Gerencial - visao da unidade</option>
+              <option value="full">Full - usuarios e permissoes</option>
+            </select>
+          </label>
+          <label>
+            Status
+            <select id="userActiveInput">
+              <option value="true">Ativo</option>
+              <option value="false">Inativo</option>
+            </select>
+          </label>
+        </div>
+        <div class="permission-note">
+          Apenas usuarios com permissao <strong>full</strong> podem criar usuarios, editar perfis e alterar permissoes.
+        </div>
+        <div class="dialog-actions">
+          <button class="ghost-action" type="button" data-close-user>Cancelar</button>
+          <button class="primary-action" type="submit">Salvar usuario</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="taskDialog">
+      <form id="taskForm" class="dialog-card">
+        <div class="dialog-head">
+          <div>
+            <p class="eyebrow">Pendencia operacional</p>
+            <h3>Nova tarefa</h3>
+          </div>
+          <button class="icon-action" type="button" data-close-task>x</button>
+        </div>
+        <label>
+          Titulo
+          <input id="taskTitleInput" required maxlength="90" placeholder="Ex.: Verificar catraca da entrada">
+        </label>
+        <label>
+          Descricao
+          <textarea id="taskDescriptionInput" required rows="4" placeholder="Descreva a acao esperada"></textarea>
+        </label>
+        <div class="form-grid">
+          <label>
+            Responsavel
+            <select id="taskAssignedInput"></select>
+          </label>
+          <label>
+            Setor
+            <select id="taskSectorInput">
+              <option>Equipamentos</option>
+              <option>Recepcao</option>
+              <option>Limpeza</option>
+              <option>Manutencao</option>
+              <option>Comercial</option>
+              <option>Professores</option>
+              <option>Gerencia</option>
+            </select>
+          </label>
+          <label>
+            Prazo
+            <input id="taskDueInput" type="datetime-local" required>
+          </label>
+          <label>
+            Evidencia
+            <select id="taskEvidenceInput">
+              <option value="false">Nao obrigatoria</option>
+              <option value="true">Obrigatoria</option>
+            </select>
+          </label>
+        </div>
+        <div class="dialog-actions">
+          <button class="ghost-action" type="button" data-close-task>Cancelar</button>
+          <button class="primary-action" type="submit">Criar tarefa</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="checklistDialog">
+      <form id="checklistForm" class="dialog-card">
+        <div class="dialog-head">
+          <div>
+            <p class="eyebrow">Rotina recorrente</p>
+            <h3>Novo checklist</h3>
+          </div>
+          <button class="icon-action" type="button" data-close-checklist>x</button>
+        </div>
+        <div class="form-grid">
+          <label>
+            Nome
+            <input id="checklistTitleInput" required maxlength="90" placeholder="Ex.: Recepcao - Fechamento">
+          </label>
+          <label>
+            Responsavel
+            <select id="checklistAssignedInput"></select>
+          </label>
+          <label>
+            Setor
+            <select id="checklistSectorInput">
+              <option>Recepcao</option>
+              <option>Limpeza</option>
+              <option>Manutencao</option>
+              <option>Comercial</option>
+              <option>Professores</option>
+              <option>Gerencia</option>
+              <option>Equipamentos</option>
+            </select>
+          </label>
+          <label>
+            Tipo
+            <select id="checklistTypeInput">
+              <option>Diario</option>
+              <option>Semanal</option>
+              <option>Mensal</option>
+              <option>Abertura</option>
+              <option>Fechamento</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          Itens do checklist
+          <textarea id="checklistItemsInput" required rows="7" placeholder="Digite um item por linha. Use * no final para exigir evidencia.&#10;Ex.: Limpar banheiro *&#10;Conferir bebedouro"></textarea>
+        </label>
+        <div class="permission-note">
+          Dica: cada linha vira um item. Se terminar com <strong>*</strong>, o item fica marcado como evidencia obrigatoria.
+        </div>
+        <div class="dialog-actions">
+          <button class="ghost-action" type="button" data-close-checklist>Cancelar</button>
+          <button class="primary-action" type="submit">Criar checklist</button>
+        </div>
+      </form>
     </dialog>
 
     <script src="ris-control.js"></script>

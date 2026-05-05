@@ -27,37 +27,17 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(1100px 620px at 78% -14%, rgba(209, 244, 70, 0.78), transparent 64%),
-    linear-gradient(135deg, #000000 0%, #000000 42%, #606060 42%, #606060 70%, #ffffff 70%);
+  background: linear-gradient(135deg, #f7f8f5 0%, #eef1ec 56%, #ffffff 100%);
   color: var(--ink);
   overflow-x: hidden;
 }
 
 body::before {
-  content: "";
-  position: fixed;
-  z-index: -1;
-  inset: auto -18vw -22vw -10vw;
-  height: 44vw;
-  min-height: 360px;
-  background:
-    linear-gradient(115deg, rgba(95, 37, 159, 0.96), rgba(95, 37, 159, 0.96) 48%, rgba(209, 244, 70, 0.9) 48%, rgba(209, 244, 70, 0.9));
-  clip-path: polygon(0 38%, 13% 24%, 27% 35%, 43% 12%, 57% 30%, 72% 8%, 88% 22%, 100% 10%, 100% 100%, 0 100%);
-  opacity: 0.95;
+  content: none;
 }
 
 body::after {
-  content: "";
-  position: fixed;
-  z-index: -1;
-  top: 42px;
-  right: -90px;
-  width: min(58vw, 720px);
-  height: min(38vw, 480px);
-  background: var(--lime);
-  clip-path: polygon(8% 18%, 100% 0, 92% 76%, 36% 100%, 0 62%);
-  opacity: 0.9;
+  content: none;
 }
 
 button,
@@ -73,6 +53,11 @@ button {
 
 .hidden {
   display: none !important;
+}
+
+.mobile-menu-button,
+.mobile-menu-overlay {
+  display: none;
 }
 
 .login-shell {
@@ -255,34 +240,15 @@ textarea:focus {
   min-height: 100vh;
   display: grid;
   grid-template-columns: 260px 1fr;
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.92) 0 260px, rgba(244, 246, 241, 0.86) 260px 100%);
+  background: linear-gradient(135deg, #f7f8f5 0%, #eef1ec 58%, #ffffff 100%);
 }
 
 .app-shell::before {
-  content: "";
-  position: fixed;
-  top: -130px;
-  right: -120px;
-  width: 55vw;
-  height: 420px;
-  pointer-events: none;
-  background: var(--lime);
-  clip-path: polygon(16% 0, 100% 0, 100% 78%, 72% 100%, 22% 86%, 0 34%);
-  opacity: 0.96;
+  content: none;
 }
 
 .app-shell::after {
-  content: "";
-  position: fixed;
-  left: 210px;
-  bottom: -170px;
-  width: 52vw;
-  height: 340px;
-  pointer-events: none;
-  background: var(--purple);
-  clip-path: polygon(0 24%, 56% 0, 100% 38%, 85% 100%, 0 100%);
-  opacity: 0.9;
+  content: none;
 }
 
 .sidebar {
@@ -336,10 +302,6 @@ textarea:focus {
   color: #000000;
 }
 
-#resetDemo {
-  margin-top: auto;
-}
-
 .main-panel {
   position: relative;
   z-index: 1;
@@ -347,16 +309,18 @@ textarea:focus {
 }
 
 .topbar {
+  position: relative;
+  z-index: 50;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
   margin-bottom: 22px;
   padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(96, 96, 96, 0.14);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(20px);
 }
 
@@ -368,6 +332,7 @@ textarea:focus {
 .topbar-actions {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
 .view {
@@ -376,6 +341,99 @@ textarea:focus {
 
 .active-view {
   display: block;
+}
+
+.action-menu,
+.profile-menu {
+  position: relative;
+  z-index: 60;
+}
+
+.create-action {
+  background: #000000;
+  color: var(--lime);
+  font-size: 1.25rem;
+  box-shadow: inset 0 0 0 1px rgba(209, 244, 70, 0.3);
+}
+
+.action-menu-list,
+.profile-menu-list {
+  position: absolute;
+  z-index: 100;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 190px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+}
+
+.action-menu-list {
+  top: 0;
+  left: calc(100% + 10px);
+  right: auto;
+}
+
+.action-menu-list button,
+.profile-menu-list button {
+  width: 100%;
+  border: 0;
+  border-radius: 8px;
+  padding: 9px 10px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+}
+
+.action-menu-list button:hover,
+.profile-menu-list button:hover {
+  background: var(--lime);
+}
+
+.action-menu-list span,
+.action-menu-list strong {
+  display: block;
+}
+
+.action-menu-list span {
+  margin-bottom: 2px;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.action-menu-list strong {
+  font-size: 0.86rem;
+}
+
+.profile-button {
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--purple);
+  font-weight: 900;
+}
+
+.profile-summary {
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.profile-summary strong,
+.profile-summary span {
+  display: block;
+}
+
+.profile-summary span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
 }
 
 .metric-grid {
@@ -528,6 +586,25 @@ textarea:focus {
   flex-wrap: wrap;
 }
 
+.split-toolbar {
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid rgba(96, 96, 96, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(20px);
+}
+
+.split-toolbar > label {
+  margin-right: auto;
+}
+
+.split-toolbar h3 {
+  margin: 0;
+}
+
 .toolbar label {
   min-width: 210px;
 }
@@ -538,6 +615,10 @@ textarea:focus {
   padding: 16px;
   display: grid;
   gap: 12px;
+}
+
+.user-card::before {
+  background: linear-gradient(90deg, var(--purple), var(--lime), var(--cool-gray));
 }
 
 .record-top {
@@ -654,6 +735,17 @@ textarea:focus {
   margin-top: 18px;
 }
 
+.settings-panel {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.danger-action {
+  justify-self: start;
+  color: var(--red);
+}
+
 dialog {
   width: min(760px, calc(100% - 24px));
   border: 0;
@@ -715,6 +807,97 @@ dialog::backdrop {
   text-transform: uppercase;
 }
 
+.timeline-block {
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.timeline-list {
+  display: grid;
+  gap: 12px;
+}
+
+.timeline-entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 10px;
+}
+
+.timeline-entry:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 20px;
+  bottom: -12px;
+  width: 2px;
+  background: #eeeeee;
+}
+
+.timeline-dot {
+  position: relative;
+  z-index: 1;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #ffffff;
+  border-radius: 999px;
+  background: var(--cool-gray);
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.timeline-dot.created {
+  background: var(--lime);
+}
+
+.timeline-dot.status_changed,
+.timeline-dot.task_created,
+.timeline-dot.managed {
+  background: var(--purple);
+}
+
+.timeline-dot.management_note {
+  background: #000000;
+}
+
+.timeline-dot.reopened {
+  background: var(--amber);
+}
+
+.timeline-dot.evidence_added {
+  background: var(--blue);
+}
+
+.timeline-entry strong,
+.timeline-entry p,
+.timeline-entry small {
+  display: block;
+}
+
+.timeline-entry p {
+  margin: 4px 0;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.timeline-entry small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.permission-note {
+  padding: 12px;
+  border-radius: 8px;
+  background: #f6f6f6;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.permission-note strong {
+  color: var(--purple);
+}
+
 .empty-state {
   padding: 20px;
   border: 1px dashed var(--line);
@@ -723,26 +906,96 @@ dialog::backdrop {
   text-align: center;
 }
 
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 28px;
+  padding: 18px 4px 6px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.app-footer strong,
+.app-footer span {
+  display: block;
+}
+
+.app-footer strong {
+  color: var(--ink);
+  font-size: 0.94rem;
+}
+
+.footer-meta {
+  display: flex;
+  gap: 12px;
+  text-align: right;
+}
+
 @media (max-width: 980px) {
   .app-shell {
     grid-template-columns: 1fr;
-    background: rgba(244, 246, 241, 0.9);
+    background: linear-gradient(135deg, #f7f8f5 0%, #eef1ec 58%, #ffffff 100%);
+  }
+
+  .mobile-menu-button {
+    position: fixed;
+    z-index: 120;
+    left: 16px;
+    bottom: 16px;
+    width: 52px;
+    height: 52px;
+    border: 1px solid rgba(209, 244, 70, 0.32);
+    border-radius: 999px;
+    background: #000000;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+    display: grid;
+    place-content: center;
+    gap: 4px;
+  }
+
+  .mobile-menu-button span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    border-radius: 99px;
+    background: var(--lime);
+  }
+
+  .mobile-menu-overlay {
+    position: fixed;
+    z-index: 90;
+    inset: 0;
+    display: block;
+    background: rgba(0, 0, 0, 0.42);
   }
 
   .sidebar {
-    position: static;
+    position: fixed;
+    z-index: 110;
+    inset: auto 16px 80px 16px;
     height: auto;
-    border-right: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    max-height: min(76vh, 560px);
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    transform: translateY(calc(100% + 100px));
+    transition: transform 180ms ease;
+  }
+
+  .app-shell.mobile-menu-open .sidebar {
+    transform: translateY(0);
   }
 
   .side-nav {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: 1fr;
   }
 
   .nav-item {
-    text-align: center;
-    padding: 0 8px;
+    text-align: left;
+    padding: 0 14px;
   }
 
   .metric-grid,
@@ -754,23 +1007,35 @@ dialog::backdrop {
 
 @media (max-width: 640px) {
   .main-panel,
-  .sidebar,
   .login-panel {
     padding: 16px;
   }
 
   .topbar,
-  .record-top {
+  .record-top,
+  .split-toolbar {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .topbar-actions {
+  .split-toolbar > button {
     width: 100%;
   }
 
+  .topbar-actions {
+    width: auto;
+    flex-wrap: nowrap;
+  }
+
   .topbar-actions button {
-    flex: 1;
+    flex: initial;
+  }
+
+  .action-menu-list,
+  .profile-menu-list {
+    top: calc(100% + 10px);
+    left: 0;
+    right: auto;
   }
 
   .side-nav,
@@ -784,5 +1049,14 @@ dialog::backdrop {
 
   .toolbar label {
     min-width: 100%;
+  }
+
+  .app-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .footer-meta {
+    text-align: left;
   }
 }
